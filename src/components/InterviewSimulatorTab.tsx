@@ -289,18 +289,16 @@ export const InterviewSimulatorTab: React.FC<InterviewSimulatorTabProps> = ({
       {/* ========================================================================= */}
       {/* TOP HERO & CONFIGURATION CARD */}
       {/* ========================================================================= */}
-      <div className="bg-zinc-900/70 border border-zinc-800/90 rounded-2xl p-5 sm:p-6 backdrop-blur-md shadow-2xl space-y-5">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
+        
+        {/* Top Header Row */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-bold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              <span>AI Technical Interview Simulator</span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              Role-Tailored Technical Interview Practice
+            <h1 className="text-lg font-bold text-white tracking-tight">
+              Technical Interview Simulator
             </h1>
-            <p className="text-xs text-zinc-400 mt-0.5 max-w-3xl">
-              Generates 5 realistic technical interview questions grounded directly in your resume projects, declared tech stack, and target job description requirements — with full STAR model answers and live AI scoring.
+            <p className="text-xs text-zinc-400 mt-0.5">
+              5 role-specific interview questions with STAR answers, audio speech, and AI evaluation
             </p>
           </div>
 
@@ -309,24 +307,24 @@ export const InterviewSimulatorTab: React.FC<InterviewSimulatorTabProps> = ({
             type="button"
             onClick={handleGenerateQuestions}
             disabled={isGenerating}
-            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-[0_0_20px_rgba(79,70,229,0.35)] transition flex items-center justify-center gap-2 shrink-0 disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shrink-0 disabled:opacity-50 cursor-pointer"
           >
             {isGenerating ? (
               <>
-                <RefreshCw className="w-4 h-4 animate-spin text-white" />
-                <span>Simulating Bar Raiser Questions...</span>
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-white" />
+                <span>Generating Questions...</span>
               </>
             ) : (
               <>
-                <Flame className="w-4 h-4 text-amber-300" />
-                <span>Regenerate 5 Questions</span>
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Generate 5 Questions</span>
               </>
             )}
           </button>
         </div>
 
         {/* Configuration Filters Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-zinc-800/80">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-zinc-800">
           
           {/* Target Role Selector */}
           <div>

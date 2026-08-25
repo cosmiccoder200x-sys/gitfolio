@@ -45,33 +45,35 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'dashboard' as ActiveTab, label: 'Dashboard', icon: FolderGit2 },
     { id: 'repositories' as ActiveTab, label: 'Repositories', icon: RefreshCw },
     { id: 'resume-builder' as ActiveTab, label: 'ATS Resume', icon: FileText },
-    { id: 'ats-scanner' as ActiveTab, label: 'ATS Optimizer', icon: Sparkles, badge: `${atsScore}%` },
+    { id: 'ats-scanner' as ActiveTab, label: 'ATS Scanner', icon: Sparkles, badge: `${atsScore}%` },
     { id: 'interview-simulator' as ActiveTab, label: 'Interview Prep', icon: MessageSquareCode },
     { id: 'portfolio' as ActiveTab, label: 'Portfolio', icon: Globe },
     { id: 'ai-assistant' as ActiveTab, label: 'AI Advisor', icon: Bot },
   ];
 
-
   return (
-    <header className="sticky top-0 z-40 border-b border-zinc-800/80 bg-[#0a0a0c]/90 dark:bg-[#0a0a0c]/90 bg-white/95 backdrop-blur-md transition-colors duration-200">
+    <header className="sticky top-0 z-40 border-b border-zinc-800 bg-[#0a0a0c]/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           
-          {/* Logo & Brand */}
-          <div className="flex items-center gap-3 shrink-0 cursor-pointer" onClick={() => onSelectTab('dashboard')}>
-            <div className="w-9 h-9 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(56,189,248,0.25)] border border-sky-500/30 flex items-center justify-center bg-[#090D16]">
-              <Logo size={36} showBackground={false} />
+          {/* Brand Logo */}
+          <div 
+            className="flex items-center gap-3 cursor-pointer select-none" 
+            onClick={() => onSelectTab('dashboard')}
+          >
+            <div className="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+              <FolderGit2 className="w-4 h-4" />
             </div>
-            <div>
-              <h1 className="text-base sm:text-lg font-semibold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-                <span className="bg-gradient-to-r from-sky-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent font-bold">GitFolio</span>
-                <span className="text-zinc-500 font-normal text-sm sm:text-base">Architect</span>
-              </h1>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-base text-white tracking-tight">GitFolio</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">
+                PRO
+              </span>
             </div>
           </div>
 
-          {/* Pill Navigation (Desktop) */}
-          <nav className="hidden md:flex items-center gap-1 bg-zinc-900/60 dark:bg-zinc-900/60 bg-slate-100 p-1 rounded-full border border-zinc-800/60 dark:border-zinc-800/60 border-slate-200">
+          {/* Navigation Tabs */}
+          <nav className="hidden lg:flex items-center gap-1 bg-zinc-900/90 p-1 rounded-xl border border-zinc-800">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -79,16 +81,16 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   key={tab.id}
                   onClick={() => onSelectTab(tab.id)}
-                  className={`flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-medium transition-all duration-150 ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                     isActive
-                      ? 'bg-zinc-800 text-white dark:text-indigo-400 dark:bg-zinc-800 shadow-[0_0_12px_rgba(79,70,229,0.25)] border border-zinc-700/60 font-semibold'
-                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40 dark:text-zinc-400 dark:hover:text-zinc-200'
+                      ? 'bg-zinc-800 text-white font-semibold shadow-sm border border-zinc-700/80'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50'
                   }`}
                 >
                   <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-indigo-400' : 'text-zinc-500'} ${tab.id === 'repositories' && isSyncing ? 'animate-spin' : ''}`} />
                   <span>{tab.label}</span>
                   {tab.badge && (
-                    <span className="ml-0.5 text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    <span className="ml-1 text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                       {tab.badge}
                     </span>
                   )}
@@ -97,67 +99,49 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          {/* Right Action Items */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Actions */}
+          <div className="flex items-center gap-2.5">
             
-            {/* Status Indicator */}
-            <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 bg-zinc-900/80 dark:bg-zinc-900/80 bg-slate-100 rounded-lg border border-zinc-800 dark:border-zinc-800 border-slate-200">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
-              <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-400">
-                {isSyncing ? 'Syncing...' : 'API Connected'}
-              </span>
-            </div>
-
-            {/* Profile Demo Selector */}
-            <div className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-300 bg-zinc-900/60 dark:bg-zinc-900/60 bg-slate-100 px-2.5 py-1 rounded-lg border border-zinc-800 dark:border-zinc-800 border-slate-200">
-              <UserCheck className="w-3.5 h-3.5 text-indigo-400" />
+            {/* Profile Selector */}
+            <div className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-300 bg-zinc-900 px-2.5 py-1.5 rounded-lg border border-zinc-800">
+              <span className="text-zinc-500">Profile:</span>
               <select
-                className="bg-transparent font-medium text-slate-900 dark:text-zinc-200 outline-none cursor-pointer text-xs"
+                className="bg-transparent font-medium text-zinc-200 outline-none cursor-pointer text-xs"
                 onChange={(e) => onSelectProfile(e.target.value)}
                 value={selectedProfileId}
               >
                 {SAMPLE_PROFILES.map((p) => (
                   <option key={p.id} value={p.id} className="bg-zinc-900 text-zinc-200">
-                    {p.name.split(' ')[0]} ({p.role.split('&')[0]})
+                    {p.name}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* ATS Score Indicator */}
-            <button
-              onClick={() => onSelectTab('ats-scanner')}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-zinc-900/80 dark:bg-zinc-900/80 border border-zinc-800 hover:border-indigo-500/40 text-emerald-400 transition"
-              title="View ATS Score & Recommendations"
-            >
-              <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
-              <span className="text-[11px] font-mono text-zinc-300">ATS {atsScore}%</span>
-            </button>
-
-            {/* Quick PDF button if handler available */}
+            {/* Export PDF Button */}
             {onQuickPdfDownload && (
               <button
                 onClick={onQuickPdfDownload}
-                className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold shadow-[0_0_12px_rgba(79,70,229,0.3)] transition"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold shadow-sm transition"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Export PDF</span>
               </button>
             )}
 
-            {/* Dark Mode Toggle */}
+            {/* Theme Toggle */}
             <button
               onClick={onToggleDarkMode}
-              className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60 transition"
+              className="p-2 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition border border-zinc-800"
               aria-label="Toggle theme"
             >
-              {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
+              {isDarkMode ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Row */}
-        <nav className="flex md:hidden space-x-1 overflow-x-auto no-scrollbar py-2 border-t border-zinc-800/60 text-xs font-medium">
+        {/* Mobile Navigation */}
+        <nav className="flex lg:hidden space-x-1 overflow-x-auto no-scrollbar py-2 border-t border-zinc-800/80 text-xs font-medium">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -165,19 +149,14 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 key={tab.id}
                 onClick={() => onSelectTab(tab.id)}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-full whitespace-nowrap transition-all ${
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-lg whitespace-nowrap transition-all ${
                   isActive
-                    ? 'bg-zinc-800 text-indigo-400 border border-zinc-700/60 font-semibold shadow-[0_0_10px_rgba(79,70,229,0.2)]'
+                    ? 'bg-zinc-800 text-indigo-400 border border-zinc-700 font-semibold'
                     : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40'
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-indigo-400' : 'text-zinc-500'}`} />
                 <span>{tab.label}</span>
-                {tab.badge && (
-                  <span className="text-[9px] font-bold px-1 rounded bg-emerald-500/20 text-emerald-400">
-                    {tab.badge}
-                  </span>
-                )}
               </button>
             );
           })}

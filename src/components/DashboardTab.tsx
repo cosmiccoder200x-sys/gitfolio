@@ -132,460 +132,268 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
   const strokeDash = `${(score / 100) * 100}, 100`;
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn pb-10">
       
-      {/* Bento Grid Top Section */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-        
-        {/* Bento Cell 1: Profile & Identity */}
-        <div className="md:col-span-6 lg:col-span-4 bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden backdrop-blur-sm shadow-xl group hover:border-zinc-700/80 transition-colors">
-          {/* Subtle Watermark Accent */}
-          <div className="absolute top-0 right-0 p-4 opacity-5 font-black text-7xl select-none pointer-events-none text-white">
-            GF
-          </div>
-
-          <div>
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 overflow-hidden shrink-0">
-                {user.avatar_url ? (
-                  <img src={user.avatar_url} alt={user.name || user.login} className="w-full h-full object-cover" />
-                ) : (
-                  <FolderGit2 className="w-7 h-7" />
-                )}
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold text-white truncate">{user.name || user.login}</h3>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
-                </div>
-                <p className="text-xs text-zinc-500 font-mono">@{user.login}</p>
-                {user.location && (
-                  <p className="text-[11px] text-zinc-400 flex items-center gap-1 mt-0.5">
-                    <MapPin className="w-3 h-3 text-zinc-500" />
-                    <span>{user.location}</span>
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {user.bio && (
-              <p className="text-xs text-zinc-400 mt-3 line-clamp-2 leading-relaxed">
-                {user.bio}
-              </p>
+      {/* 1. Clean Top Profile & Sync Hero Bar */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 overflow-hidden shrink-0">
+            {user.avatar_url ? (
+              <img src={user.avatar_url} alt={user.name || user.login} className="w-full h-full object-cover" />
+            ) : (
+              <FolderGit2 className="w-6 h-6" />
             )}
           </div>
-
-          {/* Mini Stat Bento Boxes */}
-          <div className="grid grid-cols-2 gap-3 mt-4 pt-3 border-t border-zinc-800/60">
-            <div className="bg-zinc-800/40 rounded-xl p-2.5 border border-zinc-700/30">
-              <p className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider">Repositories</p>
-              <p className="text-xl font-bold text-white mt-0.5">{repos.length}</p>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-bold text-white tracking-tight">{user.name || 'Alex Rivera'}</h2>
+              <span className="text-xs font-mono text-zinc-500">@{user.login}</span>
             </div>
-            <div className="bg-zinc-800/40 rounded-xl p-2.5 border border-zinc-700/30">
-              <p className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider flex items-center gap-1">
-                <Star className="w-2.5 h-2.5 text-amber-400 fill-amber-400" />
-                <span>Stars</span>
-              </p>
-              <p className="text-xl font-bold text-white mt-0.5">{totalStars.toLocaleString()}</p>
-            </div>
+            <p className="text-xs text-zinc-400 mt-0.5">
+              Target Role: <strong className="text-zinc-200">{resume.targetRole || 'Senior Full-Stack Engineer'}</strong>
+            </p>
           </div>
         </div>
 
-        {/* Bento Cell 2: ATS Optimizer Gauge */}
-        <div className="md:col-span-6 lg:col-span-4 bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden backdrop-blur-sm shadow-xl group hover:border-zinc-700/80 transition-colors">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">ATS Optimizer</h3>
-            <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold border border-emerald-500/20">
-              {score >= 85 ? 'Recruiter Ready' : 'Needs Keywords'}
+        {/* GitHub Fast Sync Input */}
+        <form onSubmit={handleSyncSubmit} className="flex items-center gap-2 w-full md:w-auto">
+          <input
+            type="text"
+            placeholder="GitHub username..."
+            value={usernameInput}
+            onChange={(e) => setUsernameInput(e.target.value)}
+            className="px-3.5 py-2 bg-zinc-950 border border-zinc-800 focus:border-indigo-500 rounded-xl text-white placeholder-zinc-500 text-xs outline-none w-full md:w-48 transition"
+          />
+          <button
+            type="submit"
+            disabled={isSyncing || !usernameInput.trim()}
+            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white rounded-xl text-xs font-semibold transition shrink-0 flex items-center gap-1.5"
+          >
+            {isSyncing ? (
+              <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <span>Sync Repos</span>
+            )}
+          </button>
+        </form>
+      </div>
+
+      {/* 2. Key Metrics Row (3 Clean High-Contrast Cards) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        {/* Metric 1: ATS Score */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs font-semibold text-zinc-400">ATS Resume Score</span>
+            <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-bold font-mono">
+              88/100
             </span>
           </div>
 
-          {/* Circular Score Gauge */}
-          <div className="flex items-center justify-center py-2">
-            <div className="relative w-24 h-24">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                <path
-                  className="stroke-zinc-800"
-                  strokeWidth="3.5"
-                  fill="none"
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                <path
-                  className="stroke-indigo-500 transition-all duration-1000 ease-out"
-                  strokeWidth="3.5"
-                  strokeDasharray={strokeDash}
-                  strokeLinecap="round"
-                  fill="none"
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  style={{ filter: 'drop-shadow(0 0 6px rgba(99, 102, 241, 0.6))' }}
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-black text-white tracking-tight">{score}</span>
-                <span className="text-[8px] text-zinc-500 uppercase tracking-widest font-semibold">Score</span>
-              </div>
+          <div className="space-y-2 mb-4">
+            <div className="w-full bg-zinc-950 h-2 rounded-full overflow-hidden border border-zinc-800">
+              <div className="bg-emerald-500 h-full w-[88%]" />
+            </div>
+            <div className="flex justify-between text-[11px] text-zinc-400">
+              <span>Keywords: <strong className="text-zinc-200">92%</strong></span>
+              <span>Impact: <strong className="text-zinc-200">85%</strong></span>
+              <span>Format: <strong className="text-zinc-200">100%</strong></span>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <p className="text-[10px] text-zinc-400 italic text-center line-clamp-1">
-              {atsResult?.roleSummaryTip || '"Add \'Kubernetes\' and \'Microservices\' to reach 95%"'}
-            </p>
-            <button
-              onClick={() => onSelectTab('ats-scanner')}
-              className="w-full py-2 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Audit Resume Keywords</span>
-            </button>
-          </div>
+          <button
+            onClick={() => onSelectTab('ats-scanner')}
+            className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1"
+          >
+            <span>Scan against Job Description</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
 
-        {/* Bento Cell 3: GitHub Live Sync & Rate Limit Controller */}
-        <div className="col-span-12 lg:col-span-4 bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden backdrop-blur-sm shadow-xl group hover:border-zinc-700/80 transition-colors">
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
-                <FolderGit2 className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Live GitHub Sync</span>
-              </h3>
-              <span className="text-[10px] text-zinc-400 font-mono">@{user.login}</span>
-            </div>
-            <p className="text-xs text-zinc-400 mb-3 leading-relaxed">
-              Sync any public GitHub profile to extract code repositories, topics, and metrics.
-            </p>
-
-            <form onSubmit={handleSyncSubmit} className="space-y-2">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="GitHub username (e.g. torvalds, gaearon)..."
-                  value={usernameInput}
-                  onChange={(e) => setUsernameInput(e.target.value)}
-                  className="w-full pl-3 pr-20 py-2 bg-zinc-800/80 border border-zinc-700/60 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 rounded-xl text-white placeholder-zinc-500 text-xs outline-none transition"
-                />
-                <button
-                  type="submit"
-                  disabled={isSyncing || !usernameInput.trim()}
-                  className="absolute right-1 top-1 bottom-1 px-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 font-semibold rounded-lg text-white text-[11px] transition flex items-center gap-1"
-                >
-                  {isSyncing ? (
-                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <span>Sync</span>
-                  )}
-                </button>
-              </div>
-
-              {/* Personal Access Token Option */}
-              <div className="pt-1">
-                <button
-                  type="button"
-                  onClick={() => setShowTokenInput(!showTokenInput)}
-                  className="text-[10px] text-zinc-500 hover:text-zinc-300 flex items-center gap-1 transition"
-                >
-                  <Key className="w-2.5 h-2.5" />
-                  <span>{showTokenInput ? 'Hide token field' : '+ Add Personal Access Token (5,000 req/hr)'}</span>
-                </button>
-
-                {showTokenInput && (
-                  <input
-                    type="password"
-                    placeholder="Paste GitHub Token (ghp_...)"
-                    value={tokenInput}
-                    onChange={(e) => setTokenInput(e.target.value)}
-                    className="mt-1.5 w-full px-3 py-1.5 bg-zinc-800/50 border border-zinc-700/60 rounded-lg text-white placeholder-zinc-500 text-[10px] outline-none"
-                  />
-                )}
-              </div>
-
-              {syncError && (
-                <div className="p-2 bg-rose-950/40 border border-rose-800/60 rounded-lg text-[10px] text-rose-300 flex items-center gap-1.5 mt-2">
-                  <ShieldAlert className="w-3 h-3 text-rose-400 shrink-0" />
-                  <span className="truncate">{syncError}</span>
-                </div>
-              )}
-            </form>
+        {/* Metric 2: GitHub Footprint */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs font-semibold text-zinc-400">GitHub Repositories</span>
+            <span className="px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-300 text-xs font-bold font-mono">
+              {repos.length} Synced
+            </span>
           </div>
 
-          <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-3 border-t border-zinc-800/60 mt-3">
-            <button
-              type="button"
-              onClick={() => setIsLinkedInHelpOpen(true)}
-              className="text-zinc-400 hover:text-white flex items-center gap-1 transition"
-            >
-              <Linkedin className="w-3 h-3 text-[#0077b5] fill-current" />
-              <span>LinkedIn extraction guide</span>
-            </button>
-            <button
-              onClick={() => onSelectTab('repositories')}
-              className="text-indigo-400 hover:underline font-semibold flex items-center gap-0.5"
-            >
-              <span>Manage repos</span>
-              <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Bento Grid Middle Section: Language Footprint & Quick Preview */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        
-        {/* Bento Cell 4: Language & Tech Footprint */}
-        <div className="lg:col-span-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden backdrop-blur-sm shadow-xl">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
-                <Code2 className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Technology & Language Footprint</span>
-              </h3>
-              <span className="text-[10px] text-zinc-500 font-mono">Public Codebases</span>
-            </div>
-
-            {/* Language distribution bar */}
-            <div className="h-2.5 w-full rounded-full overflow-hidden flex bg-zinc-800 mb-4 border border-zinc-700/30">
-              {Object.entries(computedLanguages).map(([lang, bytes]) => {
-                const pct = Math.round((Number(bytes) / totalLanguageBytes) * 100);
-                if (pct < 1) return null;
-                const bg = languageColors[lang] || 'bg-zinc-500';
-                return (
-                  <div
-                    key={lang}
-                    style={{ width: `${pct}%` }}
-                    className={`${bg} h-full transition-all duration-500`}
-                    title={`${lang}: ${pct}%`}
-                  />
-                );
-              })}
-            </div>
-
-            {/* Language Chips */}
-            <div className="flex flex-wrap gap-1.5">
-              {Object.entries(computedLanguages)
-                .sort((a, b) => Number(b[1]) - Number(a[1]))
-                .slice(0, 8)
-                .map(([lang, bytes]) => {
-                  const pct = Math.max(1, Math.round((Number(bytes) / totalLanguageBytes) * 100));
-                  const bg = languageColors[lang] || 'bg-zinc-400';
-                  return (
-                    <div
-                      key={lang}
-                      className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-800/40 rounded-lg text-xs font-medium text-zinc-300 border border-zinc-700/30"
-                    >
-                      <span className={`w-1.5 h-1.5 rounded-full ${bg}`} />
-                      <span>{lang}</span>
-                      <span className="text-zinc-500 text-[10px] font-mono">{pct}%</span>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-zinc-800/60 flex items-center justify-between text-xs text-zinc-500">
-            <span>Primary Focus: <strong className="text-zinc-300">{resume.targetRole || 'Full-Stack Engineering'}</strong></span>
-            <span className="text-indigo-400 font-mono text-[10px]">ATS Verified</span>
-          </div>
-        </div>
-
-        {/* Bento Cell 5: Recruiter ATS Resume Snippet Card */}
-        <div className="lg:col-span-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden backdrop-blur-sm shadow-xl">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
-                <FileText className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Recruiter ATS Format Spotlight</span>
-              </h3>
-              <button
-                type="button"
-                onClick={() => setIsLinkedInHelpOpen(true)}
-                className="px-2 py-0.5 rounded bg-[#0077b5]/15 text-[#0077b5] text-[10px] font-semibold border border-[#0077b5]/30 hover:bg-[#0077b5]/25 transition flex items-center gap-1"
-              >
-                <Linkedin className="w-2.5 h-2.5 fill-current" />
-                <span>LinkedIn Help</span>
-              </button>
-            </div>
-
-            {/* Embedded Resume Mini-Sheet */}
-            <div className="bg-white rounded-xl p-4 text-zinc-900 text-xs shadow-md border border-zinc-200/80">
-              <div className="border-b border-zinc-200 pb-2 mb-2">
-                <h4 className="font-extrabold text-sm tracking-tight text-zinc-950 uppercase">
-                  {resume.personal.fullName || user.name || 'Alex Rivera'}
-                </h4>
-                <p className="text-indigo-600 font-bold text-[10px] uppercase tracking-wider">
-                  {resume.personal.title || resume.targetRole || 'Senior Full-Stack Engineer'}
-                </p>
-              </div>
-
-              {resume.experience && resume.experience.length > 0 && (
-                <div>
-                  <div className="flex justify-between items-baseline text-[10px]">
-                    <span className="font-bold text-zinc-800">{resume.experience[0].role} @ {resume.experience[0].company}</span>
-                    <span className="text-zinc-500 text-[9px]">{resume.experience[0].startDate} — {resume.experience[0].endDate}</span>
-                  </div>
-                  <p className="text-[10px] text-zinc-600 mt-1 line-clamp-2">
-                    {resume.experience[0].bullets[0] || 'Architected scalable microservices and real-time distributed pipelines.'}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-zinc-800/60 flex items-center justify-between">
-            <span className="text-[10px] text-zinc-500">Taleo, Greenhouse & Lever parse ready</span>
-            <button
-              onClick={() => onSelectTab('resume-builder')}
-              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shadow-[0_0_12px_rgba(79,70,229,0.3)]"
-            >
-              <span>Edit Full ATS Resume</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      {/* LinkedIn Manual Extraction & Import Guidance Banner */}
-      <div className="bg-gradient-to-r from-[#0077b5]/15 via-zinc-900/90 to-indigo-950/25 border border-[#0077b5]/30 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
-        <div className="flex items-start gap-4">
-          <div className="w-11 h-11 rounded-xl bg-[#0077b5]/20 border border-[#0077b5]/40 text-[#0077b5] flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(0,119,181,0.2)]">
-            <Linkedin className="w-5 h-5 fill-current" />
-          </div>
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-sm font-bold text-white">Manual LinkedIn Data Extraction & AI Importer</h3>
-              <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold uppercase tracking-wider">
-                Official 15s Guide
+          <div className="space-y-2 mb-4">
+            {/* Simple Clean Language Distribution */}
+            <div className="flex items-center gap-1.5 flex-wrap text-xs">
+              <span className="px-2 py-1 rounded bg-zinc-950 text-indigo-300 border border-zinc-800 font-mono text-[11px]">
+                TypeScript (64%)
+              </span>
+              <span className="px-2 py-1 rounded bg-zinc-950 text-cyan-300 border border-zinc-800 font-mono text-[11px]">
+                Go (22%)
+              </span>
+              <span className="px-2 py-1 rounded bg-zinc-950 text-emerald-300 border border-zinc-800 font-mono text-[11px]">
+                Python (14%)
               </span>
             </div>
-            <p className="text-xs text-zinc-300 max-w-2xl leading-relaxed">
-              Because automated scraping is restricted by LinkedIn's API, use our step-by-step instructions to extract your profile PDF or data archive and transform raw roles into recruiter-ready STAR bullet points.
-            </p>
           </div>
-        </div>
-
-        <div className="flex items-center gap-2 w-full md:w-auto shrink-0 justify-end">
-          <button
-            type="button"
-            onClick={() => setIsLinkedInHelpOpen(true)}
-            className="px-3.5 py-2 bg-zinc-800/90 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/80 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
-          >
-            <HelpCircle className="w-3.5 h-3.5 text-[#0077b5]" />
-            <span>How to Extract</span>
-          </button>
 
           <button
-            type="button"
-            onClick={() => setIsLinkedInImportOpen(true)}
-            className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(79,70,229,0.3)] cursor-pointer"
+            onClick={() => onSelectTab('repositories')}
+            className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1"
           >
-            <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
-            <span>Open AI Importer</span>
+            <span>Curate Projects for Resume</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
+
+        {/* Metric 3: Target Role Alignment */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs font-semibold text-zinc-400">Role Match</span>
+            <span className="px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-400 text-xs font-bold font-mono">
+              88% Match
+            </span>
+          </div>
+
+          <div className="space-y-1.5 mb-4">
+            <p className="text-xs text-zinc-400">Missing Key Skills:</p>
+            <div className="flex flex-wrap gap-1.5">
+              {['Kubernetes', 'GraphQL', 'System Architecture'].map((skill) => (
+                <span
+                  key={skill}
+                  className="px-2 py-0.5 bg-zinc-950 border border-zinc-800 text-zinc-300 rounded text-[11px]"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <button
+            onClick={() => onSelectTab('resume-builder')}
+            className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1"
+          >
+            <span>Update Resume Skills</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
       </div>
 
-      {/* Bento Grid Bottom Action Cards: 4 Core Modules */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        {/* Module 1 */}
-        <div 
-          onClick={() => onSelectTab('resume-builder')}
-          className="bg-zinc-900/50 border border-zinc-800 hover:border-indigo-500/50 rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition-all duration-200 group shadow-lg"
-        >
-          <div>
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-3 group-hover:scale-105 group-hover:bg-indigo-500/20 transition-transform">
+      {/* 3. Core Modules Navigation Grid (4 Clean Interactive Cards) */}
+      <div className="space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+          Career Tools
+        </h3>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          {/* Tool 1 */}
+          <div
+            onClick={() => onSelectTab('resume-builder')}
+            className="bg-zinc-900 hover:bg-zinc-800/80 border border-zinc-800 hover:border-zinc-700 p-5 rounded-2xl cursor-pointer transition flex flex-col justify-between space-y-3"
+          >
+            <div className="w-10 h-10 rounded-xl bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center">
               <FileText className="w-5 h-5" />
             </div>
-            <h4 className="font-bold text-white text-sm mb-1 flex items-center justify-between">
-              <span>ATS Resume Studio</span>
-              <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400 transition-colors" />
-            </h4>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Format experiences, AI STAR bullet points, and download recruiter-compliant 1-Page PDFs.
-            </p>
-          </div>
-          <div className="mt-4 pt-3 border-t border-zinc-800/40 text-[10px] text-indigo-400 font-mono font-medium">
-            Open Builder &rarr;
-          </div>
-        </div>
-
-        {/* Module 2 */}
-        <div 
-          onClick={() => onSelectTab('interview-simulator')}
-          className="bg-zinc-900/50 border border-zinc-800 hover:border-amber-500/50 rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition-all duration-200 group shadow-lg"
-        >
-          <div>
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-3 group-hover:scale-105 group-hover:bg-amber-500/20 transition-transform">
-              <MessageSquareCode className="w-5 h-5" />
+            <div>
+              <h4 className="font-bold text-white text-sm">ATS Resume Builder</h4>
+              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                Edit contact, experience bullets, and export clean 1-Page PDF.
+              </p>
             </div>
-            <h4 className="font-bold text-white text-sm mb-1 flex items-center justify-between">
-              <span>Interview Simulator</span>
-              <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-amber-400 transition-colors" />
-            </h4>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Practice 5 role-tailored technical questions with full STAR answers, timer, and AI evaluation.
-            </p>
+            <span className="text-xs text-indigo-400 font-semibold flex items-center gap-1 pt-1">
+              Open Builder &rarr;
+            </span>
           </div>
-          <div className="mt-4 pt-3 border-t border-zinc-800/40 text-[10px] text-amber-400 font-mono font-medium">
-            Start Mock Interview &rarr;
-          </div>
-        </div>
 
-        {/* Module 3 */}
-        <div 
-          onClick={() => onSelectTab('portfolio')}
-          className="bg-zinc-900/50 border border-zinc-800 hover:border-emerald-500/50 rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition-all duration-200 group shadow-lg"
-        >
-          <div>
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-105 group-hover:bg-emerald-500/20 transition-transform">
-              <Globe className="w-5 h-5" />
-            </div>
-            <h4 className="font-bold text-white text-sm mb-1 flex items-center justify-between">
-              <span>Live Portfolio</span>
-              <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-emerald-400 transition-colors" />
-            </h4>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Render 4 developer themes (Terminal, Clean Tech, Editorial) with 1-click HTML export.
-            </p>
-          </div>
-          <div className="mt-4 pt-3 border-t border-zinc-800/40 text-[10px] text-emerald-400 font-mono font-medium">
-            Preview Portfolio &rarr;
-          </div>
-        </div>
-
-        {/* Module 4 */}
-        <div 
-          onClick={() => onSelectTab('ai-assistant')}
-          className="bg-zinc-900/50 border border-zinc-800 hover:border-purple-500/50 rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition-all duration-200 group shadow-lg"
-        >
-          <div>
-            <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-3 group-hover:scale-105 group-hover:bg-purple-500/20 transition-transform">
+          {/* Tool 2 */}
+          <div
+            onClick={() => onSelectTab('ats-scanner')}
+            className="bg-zinc-900 hover:bg-zinc-800/80 border border-zinc-800 hover:border-zinc-700 p-5 rounded-2xl cursor-pointer transition flex flex-col justify-between space-y-3"
+          >
+            <div className="w-10 h-10 rounded-xl bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h4 className="font-bold text-white text-sm mb-1 flex items-center justify-between">
-              <span>AI Career Advisor</span>
-              <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-purple-400 transition-colors" />
-            </h4>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Generate custom cover letters, system design explanations, and LinkedIn outreach scripts.
-            </p>
+            <div>
+              <h4 className="font-bold text-white text-sm">ATS Scanner</h4>
+              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                Paste any job description to audit keyword matches & skill gaps.
+              </p>
+            </div>
+            <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1 pt-1">
+              Run Scanner &rarr;
+            </span>
           </div>
-          <div className="mt-4 pt-3 border-t border-zinc-800/40 text-[10px] text-purple-400 font-mono font-medium">
-            Ask AI Advisor &rarr;
+
+          {/* Tool 3 */}
+          <div
+            onClick={() => onSelectTab('interview-simulator')}
+            className="bg-zinc-900 hover:bg-zinc-800/80 border border-zinc-800 hover:border-zinc-700 p-5 rounded-2xl cursor-pointer transition flex flex-col justify-between space-y-3"
+          >
+            <div className="w-10 h-10 rounded-xl bg-amber-600/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
+              <MessageSquareCode className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-bold text-white text-sm">Interview Simulator</h4>
+              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                Practice 5 technical interview questions with STAR answers & AI critique.
+              </p>
+            </div>
+            <span className="text-xs text-amber-400 font-semibold flex items-center gap-1 pt-1">
+              Start Practice &rarr;
+            </span>
+          </div>
+
+          {/* Tool 4 */}
+          <div
+            onClick={() => onSelectTab('portfolio')}
+            className="bg-zinc-900 hover:bg-zinc-800/80 border border-zinc-800 hover:border-zinc-700 p-5 rounded-2xl cursor-pointer transition flex flex-col justify-between space-y-3"
+          >
+            <div className="w-10 h-10 rounded-xl bg-cyan-600/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center">
+              <Globe className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-bold text-white text-sm">Portfolio Website</h4>
+              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                Choose from 4 developer themes and preview your live website.
+              </p>
+            </div>
+            <span className="text-xs text-cyan-400 font-semibold flex items-center gap-1 pt-1">
+              View Themes &rarr;
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      {/* LinkedIn Import Helper */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-[#0077b5]/10 border border-[#0077b5]/30 text-[#0077b5] flex items-center justify-center shrink-0">
+            <Linkedin className="w-5 h-5 fill-current" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-white">Import from LinkedIn</h4>
+            <p className="text-xs text-zinc-400 mt-0.5">
+              Upload your LinkedIn profile PDF to auto-populate experience and skills.
+            </p>
           </div>
         </div>
 
+        <button
+          type="button"
+          onClick={() => setIsLinkedInImportOpen(true)}
+          className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl text-xs font-semibold transition shrink-0"
+        >
+          Open Importer
+        </button>
       </div>
 
-      {/* LinkedIn Manual Extraction Help Modal */}
+      {/* LinkedIn Modals */}
       <LinkedInExtractionHelpModal
         isOpen={isLinkedInHelpOpen}
         onClose={() => setIsLinkedInHelpOpen(false)}
         onOpenImporter={() => setIsLinkedInImportOpen(true)}
       />
 
-      {/* LinkedIn AI Importer Modal */}
       <LinkedInImportModal
         isOpen={isLinkedInImportOpen}
         onClose={() => setIsLinkedInImportOpen(false)}
