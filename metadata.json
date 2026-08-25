@@ -1,0 +1,6 @@
+{
+  "name": "GitFolio & ATS Resume Architect",
+  "description": "Transform GitHub activity and LinkedIn experience into recruiter-ready ATS resumes, live portfolios, and practice with role-tailored technical interview simulators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
