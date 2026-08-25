@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PortfolioConfig, SaaSUser, TemplateId, ViewportMode } from '../../types/saas';
+import { PortfolioConfig, SaaSUser, TemplateId, ViewportMode, DashboardTabId } from '../../types/saas';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { OverviewView } from './views/OverviewView';
@@ -11,11 +11,18 @@ import { DomainsView } from './views/DomainsView';
 import { SettingsView } from './views/SettingsView';
 import { AdminView } from './views/AdminView';
 
+// Career Tools Tabs
+import { ResumeBuilderTab } from '../../components/ResumeBuilderTab';
+import { ATSScannerTab } from '../../components/ATSScannerTab';
+import { AIAssistantTab } from '../../components/AIAssistantTab';
+import { InterviewSimulatorTab } from '../../components/InterviewSimulatorTab';
+import { DEFAULT_SAMPLE_RESUME, DEFAULT_ATS_RESULT, DEFAULT_SAMPLE_REPOS } from '../../data/mockProfiles';
+
 interface DashboardLayoutProps {
   user: SaaSUser;
   portfolio: PortfolioConfig;
-  activeTab: string;
-  onSelectTab: (tab: any) => void;
+  activeTab: DashboardTabId;
+  onSelectTab: (tab: DashboardTabId) => void;
   onUpdatePortfolio: (updated: Partial<PortfolioConfig>) => void;
   onNavigateHome: () => void;
   onViewPublicPortfolio: () => void;
@@ -34,7 +41,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => {
   const [viewportMode, setViewportMode] = useState<ViewportMode>('desktop');
   const [isSyncing, setIsSyncing] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [resume, setResume] = useState(DEFAULT_SAMPLE_RESUME);
+  const [atsResult, setAtsResult] = useState(DEFAULT_ATS_RESULT);
 
   const handleSyncGitHub = () => {
     setIsSyncing(true);
@@ -43,11 +52,22 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       onUpdatePortfolio({
         updatedAt: new Date().toISOString(),
       });
-    }, 1500);
+    }, 1200);
+  };
+
+  const handlePublish = () => {
+    setIsPublishing(true);
+    setTimeout(() => {
+      setIsPublishing(false);
+      onUpdatePortfolio({
+        isPublished: true,
+        lastPublishedAt: new Date().toISOString(),
+      });
+    }, 1000);
   };
 
   const handleSelectTemplate = (templateId: TemplateId) => {
-    onUpdatePortfolio({ templateId });
+    onUpdatePortfolio({ templateId, template: templateId });
   };
 
   const handleUpdateDomain = (customDomain: string) => {
@@ -55,36 +75,37 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0c] text-white flex flex-col font-sans selection:bg-indigo-500 selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
       
       {/* Top Bar Header */}
       <TopBar
         portfolio={portfolio}
         user={user}
+        activeTab={activeTab}
         viewportMode={viewportMode}
-        onViewportChange={setViewportMode}
+        onSetViewportMode={setViewportMode}
+        showViewportControls={activeTab === 'builder'}
         onSyncGitHub={handleSyncGitHub}
         isSyncing={isSyncing}
-        onPublish={onViewPublicPortfolio}
+        onPublish={handlePublish}
+        isPublishing={isPublishing}
+        onViewPublicPortfolio={onViewPublicPortfolio}
       />
 
-      {/* Main Container */}
-      <div className="flex flex-1 pt-14 min-h-[calc(100vh-3.5rem)] relative">
+      {/* Main Layout Container */}
+      <div className="flex flex-1 min-h-[calc(100vh-3.5rem)] relative">
         
-        {/* Persistent Dark Sidebar */}
+        {/* Sidebar */}
         <Sidebar
           user={user}
-          portfolio={portfolio}
           activeTab={activeTab}
           onSelectTab={onSelectTab}
-          onNavigateHome={onNavigateHome}
           onViewPublicPortfolio={onViewPublicPortfolio}
-          isCollapsed={sidebarCollapsed}
-          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          onLogout={onLogout}
         />
 
         {/* Content Area */}
-        <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'} min-w-0 bg-[#0a0a0c]`}>
+        <main className="flex-1 min-w-0 bg-[#09090b] overflow-y-auto">
           {activeTab === 'overview' && (
             <OverviewView
               user={user}
@@ -140,6 +161,49 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           {activeTab === 'admin' && (
             <AdminView />
+          )}
+
+          {/* Career Tools Views */}
+          {activeTab === 'resume' && (
+            <div className="p-6 max-w-7xl mx-auto">
+              <ResumeBuilderTab
+                resume={resume}
+                onUpdateResume={setResume}
+                atsScore={atsResult.overallScore}
+                onNavigateToScanner={() => onSelectTab('ats')}
+              />
+            </div>
+          )}
+
+          {activeTab === 'ats' && (
+            <div className="p-6 max-w-7xl mx-auto">
+              <ATSScannerTab
+                resume={resume}
+                onUpdateResume={setResume}
+                atsResult={atsResult}
+                setAtsResult={setAtsResult}
+                repos={DEFAULT_SAMPLE_REPOS}
+              />
+            </div>
+          )}
+
+          {activeTab === 'ai-assistant' && (
+            <div className="p-6 max-w-7xl mx-auto">
+              <AIAssistantTab
+                resume={resume}
+                repos={DEFAULT_SAMPLE_REPOS}
+              />
+            </div>
+          )}
+
+          {activeTab === 'interview-simulator' && (
+            <div className="p-6 max-w-7xl mx-auto">
+              <InterviewSimulatorTab
+                resume={resume}
+                onUpdateResume={setResume}
+                repos={DEFAULT_SAMPLE_REPOS}
+              />
+            </div>
           )}
         </main>
       </div>

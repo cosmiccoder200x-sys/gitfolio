@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SaaSUser, PortfolioConfig, TemplateId } from './types/saas';
+import { SaaSUser, PortfolioConfig, TemplateId, DashboardTabId } from './types/saas';
 import { MOCK_DEFAULT_USER, MOCK_PORTFOLIO_CONFIG } from './data/mockSaasData';
 
 import { LandingPage } from './features/landing/LandingPage';
@@ -8,15 +8,13 @@ import { PublicPortfolioPage } from './features/public/PublicPortfolioPage';
 import { AuthModal } from './features/auth/AuthModal';
 import { OnboardingPipelineModal } from './features/auth/OnboardingPipelineModal';
 
-const SAAS_STORAGE_KEY_USER = 'gitfolio_saas_user_v2';
-const SAAS_STORAGE_KEY_PORTFOLIO = 'gitfolio_saas_portfolio_v2';
+const SAAS_STORAGE_KEY_USER = 'gitfolio_saas_user_v3';
+const SAAS_STORAGE_KEY_PORTFOLIO = 'gitfolio_saas_portfolio_v3';
 
 export default function App() {
   // Navigation & Routing State
   const [currentRoute, setCurrentRoute] = useState<'landing' | 'dashboard' | 'public-portfolio'>('landing');
-  const [activeDashboardTab, setActiveDashboardTab] = useState<
-    'overview' | 'builder' | 'projects' | 'templates' | 'analytics' | 'domains' | 'settings' | 'admin'
-  >('overview');
+  const [activeDashboardTab, setActiveDashboardTab] = useState<DashboardTabId>('overview');
 
   // Core Data Models
   const [user, setUser] = useState<SaaSUser>(() => {
@@ -74,7 +72,7 @@ export default function App() {
 
   const handleSelectTemplateFromLanding = (templateId: TemplateId) => {
     setSelectedInitialTemplate(templateId);
-    setPortfolio((prev) => ({ ...prev, templateId }));
+    setPortfolio((prev) => ({ ...prev, templateId, template: templateId }));
     setIsOnboardingOpen(true);
   };
 
@@ -88,14 +86,15 @@ export default function App() {
     setIsOnboardingOpen(false);
     setUser((prev) => ({
       ...prev,
-      githubUsername: targetUsername,
+      username: targetUsername,
       name: targetUsername.charAt(0).toUpperCase() + targetUsername.slice(1),
     }));
     setPortfolio((prev) => ({
       ...prev,
       slug: targetUsername,
-      title: `${targetUsername.charAt(0).toUpperCase() + targetUsername.slice(1)} - Developer Portfolio`,
+      title: `${targetUsername.charAt(0).toUpperCase() + targetUsername.slice(1)} — Developer Portfolio`,
       templateId: selectedInitialTemplate || prev.templateId,
+      template: selectedInitialTemplate || prev.template,
     }));
     setCurrentRoute('dashboard');
     setActiveDashboardTab('overview');
@@ -110,7 +109,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0c] text-white font-sans antialiased">
+    <div className="min-h-screen bg-[#09090b] text-zinc-100 font-sans antialiased selection:bg-indigo-500/20 selection:text-indigo-200">
       
       {/* 1. SaaS Landing Page */}
       {currentRoute === 'landing' && (

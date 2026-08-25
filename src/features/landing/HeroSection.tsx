@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, ArrowRight, Github, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Github, Check } from 'lucide-react';
 import { LiveHeroPreview } from './LiveHeroPreview';
 
 interface HeroSectionProps {
@@ -23,41 +23,30 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   };
 
   return (
-    <section id="hero" className="relative pt-16 pb-24 sm:pt-24 sm:pb-32 overflow-hidden bg-[#0b0b0b]">
+    <section id="hero" className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 bg-[#09090b]">
       
-      {/* APEX Ambient Glow Blob */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-indigo-600/20 rounded-full blur-[140px] pointer-events-none animate-glow -z-10" />
-
-      {/* APEX Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none -z-10" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
-        {/* APEX Luxury Editorial Copy Block */}
-        <div className="text-center space-y-6 max-w-4xl mx-auto">
+        {/* Copy Block */}
+        <div className="text-center space-y-5 max-w-3xl mx-auto">
           
-          {/* APEX Eyebrow Motif */}
-          <div className="eyebrow-label animate-fadeIn">
-            <span>GITFOLIO 2.0 • LUXURY EDITORIAL ARCHITECTURE</span>
-          </div>
+          <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-semibold px-3 py-1 rounded bg-[#18181b] border border-[#27272a] inline-block">
+            GitHub to Developer Portfolio
+          </span>
 
-          {/* APEX Display Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl headline-editorial text-white tracking-tight">
-            Your GitHub Profile, <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-indigo-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-              Elevated to Luxury.
-            </span>
+          <h1 className="text-4xl sm:text-6xl font-bold text-zinc-100 tracking-tight font-display leading-[1.08]">
+            Build a portfolio from the work <br className="hidden sm:inline" />
+            you already have.
           </h1>
 
-          {/* APEX Minimal Subtext */}
-          <p className="text-base sm:text-lg text-[#9A9A9A] max-w-2xl mx-auto font-normal leading-relaxed">
-            Instantly transform your GitHub repositories, contributions, and bio into a high-converting developer portfolio. Engineered with razor-sharp editorial typography.
+          <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+            Turn your GitHub repositories, star activity, and bio into a high-converting, recruiter-ready developer portfolio. No design skills required.
           </p>
 
-          {/* APEX Fast Generator Form */}
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-2 max-w-md mx-auto pt-2">
+          {/* Generator Form */}
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-2.5 max-w-md mx-auto pt-2">
             <div className="relative w-full">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500">
                 <Github className="w-4 h-4 text-zinc-400" />
                 <span className="ml-1 text-xs font-mono text-zinc-400">github.com/</span>
               </div>
@@ -66,32 +55,33 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 placeholder="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-28 pr-4 py-3 bg-[#12131a] border border-white/[0.08] focus:border-indigo-500 rounded-xl text-white placeholder-zinc-600 text-xs font-mono outline-none shadow-lux transition"
+                className="w-full pl-28 pr-4 py-2.5 bg-[#121215] border border-[#27272a] focus:border-zinc-500 rounded-lg text-zinc-100 placeholder-zinc-500 text-xs font-mono outline-none transition"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-glow-sm transition flex items-center justify-center gap-2 shrink-0 cursor-pointer uppercase tracking-wider font-mono"
+              className="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer shadow-sm"
             >
-              <span>Build Portfolio</span>
+              <span>Create your portfolio</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </form>
 
-          {/* APEX Minimal Feature Signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-[11px] text-[#9A9A9A] font-mono pt-1">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              Sub-second Edge Deploy
+          {/* Secondary Action & Trust signals */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-zinc-400 pt-2 font-mono">
+            <button
+              onClick={onExploreExamples}
+              className="text-zinc-300 hover:text-white underline cursor-pointer"
+            >
+              View examples &rarr;
+            </button>
+            <span className="text-zinc-600">•</span>
+            <span className="flex items-center gap-1">
+              <Check className="w-3.5 h-3.5 text-emerald-400" /> Free Subdomain
             </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              Automated GitHub Sync
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              Custom Domains & SSL
+            <span className="flex items-center gap-1">
+              <Check className="w-3.5 h-3.5 text-emerald-400" /> Custom Domains & SSL
             </span>
           </div>
 

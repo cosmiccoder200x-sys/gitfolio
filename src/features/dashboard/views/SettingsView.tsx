@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PortfolioConfig } from '../../../types/saas';
-import { Settings, User, Search, Shield, Save, Check, RefreshCw, Trash2 } from 'lucide-react';
+import { Settings, User, Search, Save, Check, Shield, AlertTriangle } from 'lucide-react';
 
 interface SettingsViewProps {
   portfolio: PortfolioConfig;
@@ -12,8 +12,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onUpdatePortfolio,
 }) => {
   const [slug, setSlug] = useState(portfolio.slug);
-  const [seoTitle, setSeoTitle] = useState(portfolio.seoTitle);
-  const [seoDescription, setSeoDescription] = useState(portfolio.seoDescription);
+  const [seoTitle, setSeoTitle] = useState(portfolio.seoTitle || portfolio.title);
+  const [seoDescription, setSeoDescription] = useState(portfolio.seoDescription || portfolio.tagline);
   const [googleAnalyticsId, setGoogleAnalyticsId] = useState(portfolio.googleAnalyticsId || '');
   const [saved, setSaved] = useState(false);
 
@@ -30,81 +30,78 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   return (
-    <div className="p-6 sm:p-8 space-y-8 max-w-5xl mx-auto animate-fadeIn">
+    <div className="p-6 sm:p-8 space-y-8 max-w-4xl mx-auto animate-fadeIn font-sans">
       
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-          Portfolio & SEO Settings
+        <h1 className="text-2xl font-bold text-zinc-100 tracking-tight font-display">
+          Settings & SEO
         </h1>
-        <p className="text-xs sm:text-sm text-zinc-400 mt-1">
-          Configure search engine indexing, social meta tags, slug handles, and integrations.
+        <p className="text-xs text-zinc-400 mt-1">
+          Configure portfolio handle, search engine indexing, OpenGraph metadata, and integrations.
         </p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
         
-        {/* URL Handle / Slug */}
-        <div className="bg-[#12131a] border border-white/[0.08] rounded-2xl p-6 space-y-4 shadow-xl">
-          <h3 className="text-sm font-bold text-white uppercase font-mono tracking-wider flex items-center gap-2">
-            <User className="w-4 h-4 text-indigo-400" />
-            <span>Public URL Slug</span>
+        {/* Profile & URL Handle */}
+        <div className="bg-[#121215] border border-[#27272a] rounded-xl p-5 space-y-4">
+          <h3 className="text-xs font-mono font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+            <User className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Public URL Handle</span>
           </h3>
 
           <div className="space-y-2">
-            <label className="text-xs text-zinc-400">gitfolio.dev Username Handle</label>
-            <div className="flex items-center gap-2 bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-xs font-mono text-zinc-400">
+            <label className="text-xs text-zinc-300 font-medium">gitfolio.dev Username Handle</label>
+            <div className="flex items-center gap-2 bg-[#18181b] border border-[#27272a] rounded-lg px-3 py-2 text-xs font-mono text-zinc-400">
               <span>gitfolio.dev/</span>
               <input
                 type="text"
                 value={slug}
                 onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                className="flex-1 bg-transparent text-white focus:outline-none font-bold text-sm"
+                className="flex-1 bg-transparent text-zinc-100 focus:outline-none font-bold text-xs"
               />
             </div>
-            <p className="text-[11px] text-zinc-500">
-              Only alphanumeric characters and hyphens allowed. Changing this will redirect existing links.
-            </p>
           </div>
         </div>
 
         {/* SEO Meta Tags */}
-        <div className="bg-[#12131a] border border-white/[0.08] rounded-2xl p-6 space-y-4 shadow-xl">
-          <h3 className="text-sm font-bold text-white uppercase font-mono tracking-wider flex items-center gap-2">
-            <Search className="w-4 h-4 text-emerald-400" />
-            <span>Search Engine Optimization (SEO) & OpenGraph</span>
+        <div className="bg-[#121215] border border-[#27272a] rounded-xl p-5 space-y-4">
+          <h3 className="text-xs font-mono font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+            <Search className="w-3.5 h-3.5 text-emerald-400" />
+            <span>SEO & OpenGraph Metadata</span>
           </h3>
 
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-xs text-zinc-300 font-medium">Meta Title Tag</label>
+          <div className="space-y-3 text-xs">
+            <div className="space-y-1">
+              <label className="text-zinc-300 font-medium">Meta Title Tag</label>
               <input
                 type="text"
                 value={seoTitle}
                 onChange={(e) => setSeoTitle(e.target.value)}
-                className="w-full px-4 py-2.5 bg-zinc-950 border border-zinc-800 focus:border-indigo-500 rounded-xl text-white text-xs outline-none"
+                className="w-full px-3 py-2 bg-[#18181b] border border-[#27272a] focus:border-zinc-500 rounded text-zinc-100 outline-none"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs text-zinc-300 font-medium">Meta Description Tag</label>
+            <div className="space-y-1">
+              <label className="text-zinc-300 font-medium">Meta Description Tag</label>
               <textarea
                 rows={3}
                 value={seoDescription}
                 onChange={(e) => setSeoDescription(e.target.value)}
-                className="w-full px-4 py-2.5 bg-zinc-950 border border-zinc-800 focus:border-indigo-500 rounded-xl text-white text-xs outline-none resize-none"
+                className="w-full px-3 py-2 bg-[#18181b] border border-[#27272a] focus:border-zinc-500 rounded text-zinc-100 outline-none resize-none"
               />
             </div>
 
-            {/* Google Search Result Mockup */}
+            {/* Google Search Result Preview */}
             <div className="pt-2">
-              <span className="text-[10px] text-zinc-500 uppercase font-mono block mb-2">Google Search Result Preview</span>
-              <div className="p-4 bg-zinc-950 border border-zinc-800 rounded-xl space-y-1 text-xs">
-                <div className="text-zinc-400 text-[11px] font-mono">https://gitfolio.dev › {slug}</div>
-                <div className="text-indigo-400 font-semibold text-sm hover:underline cursor-pointer truncate">
+              <span className="text-[10px] text-zinc-500 font-mono block mb-1">Search Result Preview</span>
+              <div className="p-3 bg-[#18181b] border border-[#27272a] rounded-lg space-y-0.5">
+                <div className="text-zinc-400 text-[10px] font-mono">https://gitfolio.dev › {slug}</div>
+                <div className="text-indigo-400 font-semibold text-xs truncate">
                   {seoTitle || 'Developer Portfolio'}
                 </div>
-                <div className="text-zinc-400 text-xs line-clamp-2">
+                <div className="text-zinc-400 text-[11px] line-clamp-2">
                   {seoDescription || 'Full-stack software developer portfolio built with Gitfolio.'}
                 </div>
               </div>
@@ -112,25 +109,44 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
 
-        {/* Third Party Analytics */}
-        <div className="bg-[#12131a] border border-white/[0.08] rounded-2xl p-6 space-y-4 shadow-xl">
-          <h3 className="text-sm font-bold text-white uppercase font-mono tracking-wider flex items-center gap-2">
-            <Settings className="w-4 h-4 text-cyan-400" />
-            <span>Third-Party Analytics</span>
+        {/* Integrations */}
+        <div className="bg-[#121215] border border-[#27272a] rounded-xl p-5 space-y-4">
+          <h3 className="text-xs font-mono font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+            <Settings className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Integrations</span>
           </h3>
 
-          <div className="space-y-1.5">
-            <label className="text-xs text-zinc-300 font-medium">Google Analytics 4 Measurement ID</label>
+          <div className="space-y-1 text-xs">
+            <label className="text-zinc-300 font-medium">Google Analytics 4 Measurement ID</label>
             <input
               type="text"
               placeholder="G-XXXXXXXXXX"
               value={googleAnalyticsId}
               onChange={(e) => setGoogleAnalyticsId(e.target.value)}
-              className="w-full px-4 py-2.5 bg-zinc-950 border border-zinc-800 focus:border-indigo-500 rounded-xl text-white text-xs font-mono outline-none"
+              className="w-full px-3 py-2 bg-[#18181b] border border-[#27272a] focus:border-zinc-500 rounded text-zinc-100 text-xs font-mono outline-none"
             />
-            <p className="text-[11px] text-zinc-500">
-              Optional. We already track cookie-less visitor stats natively in Gitfolio.
-            </p>
+          </div>
+        </div>
+
+        {/* Danger Zone */}
+        <div className="bg-[#121215] border border-rose-900/30 rounded-xl p-5 space-y-3">
+          <h3 className="text-xs font-mono font-semibold text-rose-400 uppercase tracking-wider flex items-center gap-2">
+            <AlertTriangle className="w-3.5 h-3.5" />
+            <span>Danger Zone</span>
+          </h3>
+
+          <div className="flex items-center justify-between text-xs">
+            <div>
+              <p className="font-semibold text-zinc-200">Unpublish Portfolio</p>
+              <p className="text-[11px] text-zinc-500">Temporarily take your portfolio offline.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => onUpdatePortfolio({ isPublished: false })}
+              className="px-3 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/50 rounded text-xs font-semibold transition cursor-pointer"
+            >
+              Unpublish
+            </button>
           </div>
         </div>
 
@@ -138,17 +154,17 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         <div className="flex justify-end pt-2">
           <button
             type="submit"
-            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-[0_0_15px_rgba(99,102,241,0.35)] transition flex items-center gap-2 cursor-pointer"
+            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition flex items-center gap-2 cursor-pointer shadow-sm"
           >
             {saved ? (
               <>
-                <Check className="w-4 h-4 text-emerald-300" />
-                <span>Settings Saved!</span>
+                <Check className="w-3.5 h-3.5 text-emerald-300" />
+                <span>Saved Changes</span>
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
-                <span>Save Changes</span>
+                <Save className="w-3.5 h-3.5" />
+                <span>Save Settings</span>
               </>
             )}
           </button>

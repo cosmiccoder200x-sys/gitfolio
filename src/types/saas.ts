@@ -1,5 +1,19 @@
 export type TemplateId = 'minimal' | 'terminal' | 'bento' | 'editorial' | 'gradient' | 'opensource';
 
+export type DashboardTabId = 
+  | 'overview' 
+  | 'builder' 
+  | 'projects' 
+  | 'templates' 
+  | 'analytics' 
+  | 'domains' 
+  | 'settings' 
+  | 'admin'
+  | 'resume'
+  | 'ats'
+  | 'ai-assistant'
+  | 'interview-simulator';
+
 export interface SaaSUser {
   id: string;
   githubId: string;

@@ -1,116 +1,94 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 :root {
-  --background: oklch(0.11 0 0);          /* #0B0B0B near-black */
-  --surface: oklch(0.14 0.01 265);        /* #12131a dark slate surface */
-  --surface-elevated: oklch(0.18 0.015 265); /* #181a24 elevated panel */
-  --foreground: oklch(0.97 0 0);         /* #F8F8F8 crisp primary text */
-  --primary: oklch(0.64 0.24 265);        /* #6366f1 electric indigo accent */
-  --primary-glow: rgba(99, 102, 241, 0.4);
-  --muted-foreground: oklch(0.66 0 0);   /* #9A9A9A secondary text */
-  --border: rgba(255, 255, 255, 0.08);   /* 8% hairline border */
+  /* Restrained Neutral SaaS System (Linear / Vercel Dark Palette) */
+  --bg-canvas: #09090b;          /* Zinc-950 main canvas background */
+  --bg-surface: #121215;         /* Zinc-900 surface cards */
+  --bg-surface-elevated: #1a1a1e;/* Zinc-800 elevated panels & popovers */
+  --bg-subtle: #27272a;          /* Hover states */
   
+  --border-subtle: #27272a;      /* 1px subtle neutral border */
+  --border-active: #3f3f46;      /* Active state border */
+  
+  --text-primary: #fafafa;       /* Zinc-50 primary text */
+  --text-secondary: #a1a1aa;     /* Zinc-400 secondary text */
+  --text-tertiary: #71717a;      /* Zinc-500 tertiary/muted text */
+  
+  --brand-accent: #6366f1;       /* Restrained indigo primary accent */
+  --brand-accent-hover: #4f46e5;
+  
+  --status-success: #10b981;     /* Emerald green status */
+  --status-warning: #f59e0b;     /* Amber status */
+  --status-error: #ef4444;       /* Rose/red status */
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Plus Jakarta Sans', -apple-system, sans-serif;
-  --font-sans: 'Inter', -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
   font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* APEX Layout Primitive Container */
-.container-lux {
-  max-width: 1440px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: clamp(1.25rem, 4vw, 3rem);
-  padding-right: clamp(1.25rem, 4vw, 3rem);
-}
-
-/* APEX Typography & Editorial Classes */
+/* Typography Hierarchy */
 .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
 }
 
-.headline-editorial {
+.headline-display {
   font-family: var(--font-display);
-  letter-spacing: -0.035em;
-  line-height: 0.95;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
+/* UI Label Eyebrow */
 .eyebrow-label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.6875rem;
   text-transform: uppercase;
-  letter-spacing: 0.3em;
-  color: #818cf8;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+  letter-spacing: 0.15em;
+  color: var(--text-tertiary);
+  font-weight: 600;
 }
 
-.eyebrow-label::before {
-  content: '—';
-  color: #6366f1;
-  font-weight: 800;
+/* Clean Surface Panels */
+.saas-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 }
 
-/* APEX Glassmorphism & Surface Utilities */
-.glass-panel {
-  background: rgba(18, 19, 26, 0.75);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  border: 1px solid var(--border);
+.saas-card-hover:hover {
+  border-color: var(--border-active);
+  transform: translateY(-1px);
 }
 
-.card-lux {
-  border-radius: 1.5rem;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
+.saas-panel-elevated {
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
 }
 
-.card-lux:hover {
-  transform: translateY(-4px);
-  border-color: rgba(99, 102, 241, 0.4);
+.glass-header {
+  background-color: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.shadow-lux {
-  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
-}
-
-.shadow-glow {
-  box-shadow: 0 0 80px -20px rgba(99, 102, 241, 0.45);
-}
-
-.shadow-glow-sm {
-  box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.35);
-}
-
-/* Grayscale -> Color image primitive */
-.img-editorial {
-  filter: grayscale(100%);
-  transition: filter 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.img-editorial:hover {
-  filter: grayscale(0%);
-  transform: scale(1.04);
-}
-
-/* APEX Animation Keyframes & Reveal Utility */
-@keyframes reveal {
+/* Subtle Micro-Animations */
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -118,36 +96,8 @@ body {
   }
 }
 
-.animate-reveal {
-  animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes glowPulse {
-  0%, 100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.85;
-    transform: scale(1.1);
-  }
-}
-
-.animate-glow {
-  animation: glowPulse 6s ease-in-out infinite;
-}
-
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  animation: marquee 35s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
+.animate-fadeIn {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Custom Scrollbars */
