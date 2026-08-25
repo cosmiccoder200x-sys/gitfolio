@@ -55,42 +55,45 @@ export const FeatureGrid: React.FC = () => {
   ];
 
   return (
-    <section id="features" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="features" className="py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 bg-[#0b0b0b]">
       
+      {/* APEX Section Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
-        <span className="text-[11px] font-mono uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 font-semibold">
-          Platform Infrastructure
-        </span>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        <div className="eyebrow-label">
+          <span>PLATFORM CAPABILITIES</span>
+        </div>
+        <h2 className="text-3xl sm:text-5xl headline-editorial text-white tracking-tight">
           Engineered for Developers
         </h2>
-        <p className="text-xs sm:text-sm text-zinc-400 font-normal">
+        <p className="text-xs sm:text-sm text-[#9A9A9A] font-normal">
           Minimal friction. Maximum impact for software engineers and technical creators.
         </p>
       </div>
 
+      {/* Grid Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {features.map((feat, idx) => {
           const Icon = feat.icon;
           return (
             <div 
               key={idx}
-              className="bg-[#12131a] border border-white/[0.08] hover:border-indigo-500/40 rounded-2xl p-5 flex flex-col justify-between shadow-xl transition group hover:-translate-y-0.5 duration-200"
+              className="glass-panel hover:border-indigo-500/40 rounded-2xl p-6 flex flex-col justify-between shadow-lux transition group hover:-translate-y-1 duration-300"
             >
-              <div className="space-y-3">
-                <div className="w-9 h-9 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-105 group-hover:bg-indigo-600/20 transition">
-                  <Icon className="w-4 h-4" />
+              <div className="space-y-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-105 group-hover:bg-indigo-600/20 transition">
+                  <Icon className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-white text-sm tracking-tight">
+                <h3 className="font-bold text-white text-base font-display tracking-tight">
                   {feat.title}
                 </h3>
-                <p className="text-xs text-zinc-400 leading-relaxed font-normal">
+                <p className="text-xs text-[#9A9A9A] leading-relaxed font-normal">
                   {feat.desc}
                 </p>
               </div>
 
-              <div className="pt-3 mt-3 border-t border-white/[0.04] text-[10px] font-mono text-zinc-500">
-                <span>Production Standard</span>
+              <div className="pt-4 mt-4 border-t border-white/[0.04] text-[10px] font-mono text-zinc-500 flex items-center justify-between uppercase">
+                <span>SYSTEM STD</span>
+                <span className="text-indigo-400">0{idx + 1}</span>
               </div>
             </div>
           );
